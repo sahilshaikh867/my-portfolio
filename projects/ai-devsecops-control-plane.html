@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI DevSecOps Control Plane | Sahil Shaikh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- EXACT SAME CSS from your AWS page -->
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #e3edf7;
+            --gradient-white-bg: linear-gradient(0deg, #fff 0%, #edf4fa 51%, #e5eef7 100%);
+            --gradient-color-bg: linear-gradient(180deg, rgba(247, 1, 120, 1)0%,
+                    rgba(160, 8, 156, 1)51%,
+                    rgba(99, 13, 178, 1)100%);
+            --main-color: #e6006d;
+            --font-color: #000000;
+            --gradient-white-bg2: linear-gradient(98deg, #e5eef7 0%, #fff 100%);
+        }
+
+        body.dark-mode {
+            --bg-color: #050816;
+            --gradient-white-bg: linear-gradient(0deg, #020617 0%, #050816 50%, #020617 100%);
+            --gradient-white-bg2: linear-gradient(98deg, #020617 0%, #050816 100%);
+            --main-color: #e6006d;
+            --font-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--gradient-white-bg);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        .top-nav {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: var(--gradient-color-bg);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .back-link {
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            background: var(--gradient-white-bg2);
+            color: var(--font-color);
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        .back-link span {
+            font-size: 1rem;
+        }
+
+        /* Theme button */
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            box-shadow: none;
+            position: relative;
+        }
+
+        .theme-btn img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        main {
+            max-width: 1080px;
+            margin: 2.5rem auto 3rem;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* HERO */
+        .project-hero {
+            background: var(--gradient-white-bg2);
+            border-radius: 18px;
+            padding: 2rem 2rem 1.8rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 2.2fr);
+            gap: 1.8rem;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.16);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-hero::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.28), transparent 65%);
+            top: -40px;
+            right: -60px;
+            filter: blur(2px);
+            opacity: 0.7;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pill-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.25rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.08);
+            color: #0ea5e9;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
+        }
+
+        .pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #0ea5e9;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            line-height: 1.25;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            color: var(--font-color);
+            opacity: 0.9;
+            margin-bottom: 1.1rem;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .tag {
+            font-size: 0.78rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: rgba(15, 23, 42, 0.02);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            font-size: 0.78rem;
+            color: rgba(148, 163, 184, 0.95);
+        }
+
+        .hero-meta span strong {
+            font-weight: 600;
+            color: var(--font-color);
+        }
+
+        .hero-img-area {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pipeline-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 18px;
+            padding: 1.2rem 1.1rem 1.1rem;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(79, 70, 229, 0.35), transparent 60%),
+                radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.35), transparent 60%),
+                #020617;
+            color: #f9fafb;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.75);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.78rem;
+        }
+
+        .pipeline-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            opacity: 0.86;
+        }
+
+        .pipeline-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .pipeline-env {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.8rem;
+        }
+
+        .pipeline-flow {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 0.3rem;
+            align-items: center;
+            text-align: center;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .pipe-node {
+            border-radius: 10px;
+            padding: 0.3rem 0.2rem;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            font-size: 0.65rem;
+        }
+
+        .pipe-arrow {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* Sections */
+        .section {
+            margin-top: 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--main-color);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-body {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: var(--font-color);
+            opacity: 0.94;
+        }
+
+        .section-body p+p {
+            margin-top: 0.5rem;
+        }
+
+        .pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.6rem 0 0.3rem;
+        }
+
+        .pill-list span {
+            font-size: 0.8rem;
+            padding: 0.22rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.04);
+            border: 1px dashed rgba(148, 163, 184, 0.6);
+        }
+
+        /* Pipeline steps */
+        .flow-wrapper {
+            margin-top: 1.2rem;
+            border-radius: 16px;
+            background: var(--gradient-white-bg2);
+            padding: 1.2rem 1.4rem;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+        }
+
+        .flow-title {
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.7rem;
+            font-size: 0.8rem;
+        }
+
+        .flow-step {
+            border-radius: 12px;
+            padding: 0.6rem 0.7rem;
+            background: rgba(15, 23, 42, 0.02);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            position: relative;
+        }
+
+        .flow-step strong {
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.8rem;
+        }
+
+        .flow-step small {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* Status lanes */
+        .lanes {
+            margin-top: 1.1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.7rem;
+            font-size: 0.78rem;
+        }
+
+        .lane {
+            border-radius: 12px;
+            padding: 0.6rem 0.7rem;
+            background: rgba(15, 23, 42, 0.03);
+            border: 1px solid rgba(148, 163, 184, 0.45);
+        }
+
+        .lane-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            font-size: 0.8rem;
+        }
+
+        .lane span {
+            display: inline-block;
+            font-size: 0.75rem;
+            margin-right: 0.25rem;
+            opacity: 0.9;
+        }
+
+        /* Learnings */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+            gap: 1.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .callout {
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+            background: rgba(22, 163, 74, 0.05);
+            border: 1px solid rgba(22, 163, 74, 0.35);
+            font-size: 0.9rem;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .callout ul {
+            padding-left: 1rem;
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .callout ul li+li {
+            margin-top: 0.2rem;
+        }
+
+        .callout.red {
+            background: rgba(220, 38, 38, 0.04);
+            border-color: rgba(220, 38, 38, 0.35);
+        }
+
+        /* CTA */
+        .cta-row {
+            margin-top: 2.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.86rem;
+        }
+
+        .btn-primary {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #ffffff;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            background-size: 200% 200%;
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.5);
+            cursor: pointer;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .btn-primary:hover::after {
+            transform: translateX(100%);
+        }
+
+        .btn-secondary {
+            font-size: 0.85rem;
+            color: var(--font-color);
+            opacity: 0.9;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem 1rem 2rem;
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.9);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .project-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-img-area {
+                order: -1;
+            }
+
+            main {
+                margin-top: 2rem;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .project-hero {
+                padding: 1.5rem 1.3rem 1.3rem;
+            }
+
+            .hero-title {
+                font-size: 1.6rem;
+            }
+
+            .top-nav {
+                padding-inline: 1rem;
+            }
+
+            .pipeline-flow {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .infra-diagram {
+            margin-top: 0.3rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .infra-node {
+            border-radius: 12px;
+            padding: 0.45rem 0.3rem;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+        }
+
+        .infra-arrow {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            margin: 0.2rem 0;
+            opacity: 0.8;
+        }
+
+        /* Architecture section */
+
+        .arch-section {
+            margin-top: 3rem;
+        }
+
+        .arch-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-label {
+            letter-spacing: .18em;
+            font-size: .75rem;
+            color: #ff2a6d;
+            margin-bottom: .4rem;
+            text-transform: uppercase;
+        }
+
+        .arch-desc {
+            max-width: 800px;
+            font-size: .9rem;
+            line-height: 1.7;
+            opacity: .9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* pipeline cards */
+
+        .pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pipeline-card {
+            background: rgba(15, 23, 42, .35);
+            border: 1px solid rgba(148, 163, 184, .25);
+            padding: 1rem;
+            border-radius: 14px;
+            transition: .25s;
+        }
+
+        .pipeline-card:hover {
+            transform: translateY(-4px);
+            border-color: #6366f1;
+        }
+
+        .pipeline-card h4 {
+            font-size: .9rem;
+            margin-bottom: .3rem;
+        }
+
+        .pipeline-card p {
+            font-size: .8rem;
+            opacity: .9;
+            line-height: 1.6;
+        }
+
+        /* small cards row */
+
+        .small-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .small-card {
+            background: rgba(15, 23, 42, .35);
+            border: 1px solid rgba(148, 163, 184, .25);
+            padding: .9rem 1rem;
+            border-radius: 12px;
+            font-size: .85rem;
+        }
+
+        /* learnings */
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .learn-box {
+            border-radius: 16px;
+            padding: 1.2rem;
+            font-size: .9rem;
+            line-height: 1.7;
+        }
+
+        .learn-good {
+            background: rgba(22, 163, 74, .06);
+            border: 1px solid rgba(22, 163, 74, .35);
+        }
+
+        .learn-improve {
+            background: rgba(220, 38, 38, .05);
+            border: 1px solid rgba(220, 38, 38, .35);
+        }
+
+        .learn-box h3 {
+            margin-bottom: .5rem;
+        }
+
+        .learn-box ul {
+            padding-left: 1rem;
+        }
+
+        .learn-box li {
+            margin-bottom: .3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="top-nav">
+            <div class="logo">Sahil.dev</div>
+            <div class="top-actions">
+                <a href="../index.html#portfolio" class="back-link">
+                    <span>←</span> Back to projects
+                </a>
+                <button id="theme-toggle" class="theme-btn" type="button">
+                    <img src="../img/moon.png" alt="Toggle theme">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="project-hero">
+            <div class="hero-text">
+                <div class="pill-label">
+                    <span class="pill-dot"></span>
+                    AI DevSecOps Platform
+                </div>
+                <h1 class="hero-title">AI‑powered DevSecOps Control Plane</h1>
+                <p class="hero-subtitle">
+                    Unified platform integrating AI‑driven vulnerability scanning, compliance automation,
+                    and security orchestration across CI/CD pipelines with real‑time threat intelligence.
+                </p>
+
+                <div class="hero-tags">
+                    <span class="tag">LLM‑powered scanning</span>
+                    <span class="tag">Terraform + OPA</span>
+                    <span class="tag">Kubernetes Security</span>
+                    <span class="tag">Auto‑remediation</span>
+                    <span class="tag">Grafana Dashboards</span>
+                </div>
+
+                <div class="hero-meta">
+                    <span><strong>Role:</strong> DevSecOps Architect</span>
+                    <span><strong>Time:</strong> 3 months</span>
+                    <span><strong>Focus:</strong> Security at scale</span>
+                </div>
+            </div>
+
+            <div class="hero-img-area">
+                <div class="pipeline-card">
+                    <div class="hero-card-header">
+                        <span>Control Plane v1.2</span>
+                        <span>Scan rate: 2.5k/sec</span>
+                    </div>
+                    <div class="hero-card-main">
+                        <div class="hero-card-title">AI Security Orchestrator</div>
+                        <div class="hero-card-env">LLM → Policy → Remediation</div>
+
+                        <div class="infra-diagram">
+                            <div class="infra-node">LangChain<br><small>LLM Agent</small></div>
+                            <div class="infra-node">Trivy<br><small>SCA Scan</small></div>
+                            <div class="infra-node">Grafana<br><small>Risk Dash</small></div>
+
+                            <div class="infra-arrow">
+                                <span>Git Repos</span><span>K8s Clusters</span><span>IaC</span>
+                            </div>
+
+                            <div class="infra-node">OPA<br><small>Gatekeeper</small></div>
+                            <div class="infra-node">Terraform<br><small>Fixes</small></div>
+                            <div class="infra-node">Kyverno<br><small>Policies</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-label">Overview</div>
+            <h2 class="section-title">What this project delivers</h2>
+            <div class="section-body">
+                <p>
+                    AI‑driven security platform that scans Git repositories, Kubernetes clusters, and Terraform
+                    infrastructure using LLM analysis + traditional security tools. Generates remediation code
+                    and enforces policies automatically across development pipelines.
+                </p>
+                <div class="pill-list">
+                    <span>LLM‑powered vulnerability detection</span>
+                    <span>Real‑time GitHub PR security reviews</span>
+                    <span>Auto‑generated Terraform remediation</span>
+                    <span>OPA Gatekeeper + Kyverno enforcement</span>
+                    <span>Grafana risk scoring dashboards</span>
+                </div>
+            </div>
+        </section>
+        <section class="arch-section">
+
+            <div class="arch-label">ARCHITECTURE</div>
+            <h2 class="arch-title">How metrics and logs flow</h2>
+
+            <p class="arch-desc">
+                Each application instance exposes metrics and logs. Monitoring agents collect
+                these signals and forward them to a central observability stack where
+                dashboards visualize the data and alert rules detect unusual patterns.
+            </p>
+
+            <div class="pipeline-grid">
+
+                <div class="pipeline-card">
+                    <h4>1. Metrics collection</h4>
+                    <p>System metrics like CPU, memory, disk and application metrics like
+                        request latency and error rates are exported by each service.</p>
+                </div>
+
+                <div class="pipeline-card">
+                    <h4>2. Log forwarding</h4>
+                    <p>Application logs are shipped to a centralized logging service
+                        to allow search, debugging and correlation with metrics.</p>
+                </div>
+
+                <div class="pipeline-card">
+                    <h4>3. Storage & retention</h4>
+                    <p>Metrics are stored in a time-series database while logs are stored
+                        with defined retention policies for analysis.</p>
+                </div>
+
+                <div class="pipeline-card">
+                    <h4>4. Dashboards</h4>
+                    <p>Grafana dashboards visualize service performance and highlight
+                        traffic, latency and error trends.</p>
+                </div>
+
+                <div class="pipeline-card">
+                    <h4>5. Alerts</h4>
+                    <p>Alert rules trigger notifications when thresholds are crossed
+                        such as high error rate or CPU spikes.</p>
+                </div>
+
+                <div class="pipeline-card">
+                    <h4>6. Incident loop</h4>
+                    <p>Alerts guide engineers to dashboards where incidents are
+                        investigated and resolved quickly.</p>
+                </div>
+
+            </div>
+
+            <div class="small-cards">
+
+                <div class="small-card">
+                    <strong>Dashboards</strong><br>
+                    Overview (all services) · API performance · Database health
+                </div>
+
+                <div class="small-card">
+                    <strong>Key charts</strong><br>
+                    Requests vs errors · Latency percentiles · CPU vs traffic
+                </div>
+
+                <div class="small-card">
+                    <strong>Alert examples</strong><br>
+                    Error rate > 2% · CPU > 80% · Disk < 10% free </div>
+
+                </div>
+
+        </section>
+        <section class="arch-section">
+
+            <div class="arch-label">LEARNINGS</div>
+            <h2 class="arch-title">What this project taught me</h2>
+
+            <div class="learning-grid">
+
+                <div class="learn-box learn-good">
+
+                    <h3>Key takeaways</h3>
+
+                    <ul>
+                        <li>How to design monitoring around metrics, logs and traces.</li>
+                        <li>Building dashboards that highlight operational problems.</li>
+                        <li>Choosing meaningful alert thresholds.</li>
+                        <li>Using observability data for scaling decisions.</li>
+                    </ul>
+
+                </div>
+
+                <div class="learn-box learn-improve">
+
+                    <h3>Next improvements</h3>
+
+                    <ul>
+                        <li>Add distributed tracing to follow requests across services.</li>
+                        <li>Create environment-specific dashboards (dev / staging / prod).</li>
+                        <li>Improve alerting with runbooks and escalation policies.</li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="cta-row">
+            <a href="https://github.com/sahilshaikh867/ai-devsecops-control-plane" target="_blank" class="btn-primary">
+                View project repo
+            </a>
+            <a href="../index.html#contact" class="btn-secondary">
+                Need AI security automation?
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 • AI DevSecOps Control Plane · Designed by Sahil Shaikh
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById("theme-toggle");
+
+        if (themeToggle) {
+            const icon = themeToggle.querySelector("img");
+            const storedTheme = localStorage.getItem("theme");
+
+            if (storedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                if (icon) icon.src = "../img/sun.png";
+            }
+
+            themeToggle.addEventListener("click", () => {
+                document.body.classList.toggle("dark-mode");
+
+                const isDark = document.body.classList.contains("dark-mode");
+
+                if (icon) {
+                    icon.src = isDark ? "../img/sun.png" : "../img/moon.png";
+                }
+
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+            });
+        }
+    </script>
+</body>
+
+</html>

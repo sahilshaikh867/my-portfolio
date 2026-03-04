@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Chatbot | Sahil Shaikh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #e3edf7;
+            --gradient-white-bg: linear-gradient(0deg, #fff 0%, #edf4fa 51%, #e5eef7 100%);
+            --gradient-white-bg2: linear-gradient(98deg, #e5eef7 0%, #fff 100%);
+            --gradient-color-bg: linear-gradient(180deg, #f70178, #630db2);
+            --main-color: #e6006d;
+            --font-color: #000;
+        }
+
+        body.dark-mode {
+            --bg-color: #050816;
+            --gradient-white-bg: linear-gradient(0deg, #020617 0%, #050816 50%, #020617 100%);
+            --gradient-white-bg2: linear-gradient(98deg, #020617 0%, #050816 100%);
+            --font-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Poppins;
+            background: var(--bg-color);
+            color: var(--font-color);
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: var(--gradient-white-bg);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, .08);
+        }
+
+        .top-nav {
+            max-width: 1080px;
+            margin: auto;
+            padding: .8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: var(--gradient-color-bg);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .back-link {
+            padding: .4rem .9rem;
+            border-radius: 999px;
+            background: var(--gradient-white-bg2);
+            color: var(--font-color);
+            font-size: .85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .theme-btn img {
+            width: 100%;
+        }
+
+        main {
+            max-width: 1080px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        .project-hero {
+            background: var(--gradient-white-bg2);
+            border-radius: 18px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 2fr;
+            gap: 1.8rem;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, .16);
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            margin-bottom: .6rem;
+        }
+
+        .hero-subtitle {
+            font-size: .9rem;
+            opacity: .9;
+            margin-bottom: 1rem;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            font-size: .75rem;
+            padding: .3rem .6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, .4);
+        }
+
+        .hero-meta {
+            font-size: .8rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-img-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CARD */
+
+        .hero-card {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 18px;
+            padding: 1.2rem;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(79, 70, 229, .35), transparent 60%),
+                radial-gradient(circle at 90% 90%, rgba(6, 182, 212, .35), transparent 60%),
+                #020617;
+
+            color: white;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, .75);
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: .75rem;
+            margin-bottom: .4rem;
+            opacity: .85;
+        }
+
+        .hero-card-title {
+            font-size: .9rem;
+            font-weight: 600;
+            margin-bottom: .2rem;
+        }
+
+        .hero-card-env {
+            font-size: .75rem;
+            opacity: .9;
+            margin-bottom: .7rem;
+        }
+
+        .infra-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .4rem;
+            font-size: .7rem;
+            text-align: center;
+        }
+
+        .infra-node {
+            border-radius: 10px;
+            padding: .35rem;
+            background: rgba(15, 23, 42, .45);
+            border: 1px solid rgba(148, 163, 184, .4);
+        }
+
+        .infra-arrow {
+            grid-column: 1/-1;
+            display: flex;
+            justify-content: space-between;
+            font-size: .65rem;
+            opacity: .7;
+            margin: .2rem 0;
+        }
+
+        .section {
+            margin-top: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: .6rem;
+        }
+
+        .section-body {
+            font-size: .9rem;
+            line-height: 1.6;
+        }
+
+        .pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-top: .6rem;
+        }
+
+        .pill-list span {
+            font-size: .8rem;
+            padding: .2rem .6rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, .05);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: .6rem 1.2rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #fff;
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: .8rem;
+            opacity: .7;
+        }
+
+        /* Architecture section */
+
+        .arch-section {
+            margin-top: 3rem;
+        }
+
+        .arch-title {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-label {
+            letter-spacing: .18em;
+            font-size: .75rem;
+            color: #ff2a6d;
+            margin-bottom: .4rem;
+            text-transform: uppercase;
+        }
+
+        .arch-desc {
+            max-width: 800px;
+            font-size: .9rem;
+            line-height: 1.7;
+            opacity: .9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* pipeline cards */
+
+        .pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pipeline-card {
+            background: rgba(15, 23, 42, .35);
+            border: 1px solid rgba(148, 163, 184, .25);
+            padding: 1rem;
+            border-radius: 14px;
+            transition: .25s;
+        }
+
+        .pipeline-card:hover {
+            transform: translateY(-4px);
+            border-color: #6366f1;
+        }
+
+        .pipeline-card h4 {
+            font-size: .9rem;
+            margin-bottom: .3rem;
+        }
+
+        .pipeline-card p {
+            font-size: .8rem;
+            opacity: .9;
+            line-height: 1.6;
+        }
+
+        /* small cards row */
+
+        .small-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .small-card {
+            background: rgba(15, 23, 42, .35);
+            border: 1px solid rgba(148, 163, 184, .25);
+            padding: .9rem 1rem;
+            border-radius: 12px;
+            font-size: .85rem;
+        }
+
+        /* learnings */
+
+        .learning-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .learn-box {
+            border-radius: 16px;
+            padding: 1.2rem;
+            font-size: .9rem;
+            line-height: 1.7;
+        }
+
+        .learn-good {
+            background: rgba(22, 163, 74, .06);
+            border: 1px solid rgba(22, 163, 74, .35);
+        }
+
+        .learn-improve {
+            background: rgba(220, 38, 38, .05);
+            border: 1px solid rgba(220, 38, 38, .35);
+        }
+
+        .learn-box h3 {
+            margin-bottom: .5rem;
+        }
+
+        .learn-box ul {
+            padding-left: 1rem;
+        }
+
+        .learn-box li {
+            margin-bottom: .3rem;
+        }
+
+        .section {
+            margin-top: 2.5rem;
+        }
+
+        .section-label {
+            font-size: .8rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #e6006d;
+            margin-bottom: .4rem;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: .8rem;
+        }
+
+        .section-body {
+            font-size: .92rem;
+            line-height: 1.7;
+            opacity: .95;
+        }
+
+        .section-body p+p {
+            margin-top: .5rem;
+        }
+
+        .pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-top: .8rem;
+        }
+
+        .pill-list span {
+            font-size: .78rem;
+            padding: .25rem .7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, .4);
+            background: rgba(15, 23, 42, .03);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: .6rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            font-size: .88rem;
+            font-weight: 500;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f70178, #630db2);
+            box-shadow: 0 14px 30px rgba(148, 27, 73, .5);
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="top-nav">
+
+            <div class="logo">Sahil.dev</div>
+
+            <div style="display:flex;gap:.6rem;align-items:center">
+
+                <a href="../index.html#portfolio" class="back-link">
+                    ← Back to projects
+                </a>
+
+                <button id="theme-toggle" class="theme-btn">
+                    <img src="../img/moon.png">
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="project-hero">
+
+            <div>
+
+                <h1 class="hero-title">
+                    AI Chatbot Application
+                </h1>
+
+                <p class="hero-subtitle">
+                    An intelligent chatbot system capable of understanding user queries
+                    and responding through a conversational interface using a backend
+                    AI response engine.
+                </p>
+
+                <div class="hero-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">NLP</span>
+                    <span class="tag">AI Chatbot</span>
+                    <span class="tag">Web Interface</span>
+                </div>
+
+                <div class="hero-meta">
+                    <span><strong>Role:</strong> AI Developer</span>
+                    <span><strong>Time:</strong> 1 week</span>
+                    <span><strong>Focus:</strong> Conversational AI</span>
+                </div>
+
+            </div>
+
+
+            <div class="hero-img-area">
+
+                <div class="hero-card">
+
+                    <div class="hero-card-header">
+                        <span>Chatbot Engine</span>
+                        <span>Latency: ~1s</span>
+                    </div>
+
+                    <div class="hero-card-title">
+                        Conversation Pipeline
+                    </div>
+
+                    <div class="hero-card-env">
+                        User → NLP → Response
+                    </div>
+
+                    <div class="infra-diagram">
+
+                        <div class="infra-node">
+                            User Input<br><small>Chat UI</small>
+                        </div>
+
+                        <div class="infra-node">
+                            NLP Engine<br><small>Intent Detect</small>
+                        </div>
+
+                        <div class="infra-node">
+                            Response AI<br><small>Generate</small>
+                        </div>
+
+                        <div class="infra-arrow">
+                            <span>Text</span>
+                            <span>Processing</span>
+                            <span>Reply</span>
+                        </div>
+
+                        <div class="infra-node">
+                            Python API<br><small>Backend</small>
+                        </div>
+
+                        <div class="infra-node">
+                            Training Data<br><small>Knowledge</small>
+                        </div>
+
+                        <div class="infra-node">
+                            Chat UI<br><small>Frontend</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        <section class="arch-section">
+
+            <div class="arch-label">LEARNINGS</div>
+            <h2 class="arch-title">What this project taught me</h2>
+
+            <div class="learning-grid">
+
+                <div class="learn-box learn-good">
+
+                    <h3>Key takeaways</h3>
+
+                    <ul>
+                        <li>How to design monitoring around metrics, logs and traces.</li>
+                        <li>Building dashboards that highlight operational problems.</li>
+                        <li>Choosing meaningful alert thresholds.</li>
+                        <li>Using observability data for scaling decisions.</li>
+                    </ul>
+
+                </div>
+
+                <div class="learn-box learn-improve">
+
+                    <h3>Next improvements</h3>
+
+                    <ul>
+                        <li>Add distributed tracing to follow requests across services.</li>
+                        <li>Create environment-specific dashboards (dev / staging / prod).</li>
+                        <li>Improve alerting with runbooks and escalation policies.</li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section">
+
+            <div class="section-label">Overview</div>
+            <h2 class="section-title">What this chatbot system does</h2>
+
+            <div class="section-body">
+
+                <p>
+                    This project focuses on building a conversational AI chatbot capable of
+                    understanding user queries and generating meaningful responses through
+                    a backend processing engine. The chatbot accepts user input through a
+                    web interface, processes the message using natural language processing
+                    logic, and generates a response based on predefined knowledge or
+                    response rules.
+                </p>
+
+                <p>
+                    The goal of the project was to understand the architecture behind
+                    interactive chatbot systems, including input processing, intent
+                    recognition, response generation and user interaction through a
+                    chat interface.
+                </p>
+
+                <div class="pill-list">
+
+                    <span>User message processing</span>
+                    <span>Intent detection</span>
+                    <span>AI response generation</span>
+                    <span>Backend API handling</span>
+                    <span>Interactive web chat UI</span>
+                    <span>Conversation flow logic</span>
+
+                </div>
+
+            </div>
+
+            <a href="https://github.com/sahilshaikh867/Chatbot" target="_blank" rel="noopener noreferrer"
+                class="btn-primary">
+                View project repo
+            </a>
+
+        </section>
+
+    </main>
+
+    <footer>
+        © 2026 • AI Chatbot Project · Sahil Shaikh
+    </footer>
+
+
+    <script>
+
+        const themeToggle = document.getElementById("theme-toggle");
+
+        if (themeToggle) {
+
+            const icon = themeToggle.querySelector("img");
+
+            const storedTheme = localStorage.getItem("theme");
+
+            if (storedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                icon.src = "../img/sun.png";
+            }
+
+            themeToggle.addEventListener("click", () => {
+
+                document.body.classList.toggle("dark-mode");
+
+                const isDark = document.body.classList.contains("dark-mode");
+
+                icon.src = isDark ? "../img/sun.png" : "../img/moon.png";
+
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>

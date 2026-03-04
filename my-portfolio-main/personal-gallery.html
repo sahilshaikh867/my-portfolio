@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Personal Gallery | Sahil Shaikh</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* floating shapes */
+
+.shape{
+position:absolute;
+border-radius:50%;
+filter:blur(60px);
+opacity:0.3;
+animation:float 10s infinite alternate;
+pointer-events:none;
+}
+
+.shape1{
+width:300px;
+height:300px;
+background:#ff006e;
+top:-100px;
+left:-100px;
+}
+
+.shape2{
+width:350px;
+height:350px;
+background:#7b2cbf;
+bottom:-120px;
+right:-120px;
+}
+
+.shape3{
+width:250px;
+height:250px;
+background:#00b4d8;
+top:40%;
+left:60%;
+}
+
+@keyframes float{
+from{transform:translateY(0)}
+to{transform:translateY(60px)}
+}
+
+/* header */
+
+header{
+text-align:center;
+padding:60px 20px 30px;
+position:relative;
+z-index:2;
+}
+
+header h1{
+font-size:2.4rem;
+margin-bottom:10px;
+}
+
+.quote{
+max-width:600px;
+margin:auto;
+opacity:0.8;
+font-size:0.95rem;
+}
+
+/* back button */
+
+.back-btn{
+position:absolute;
+left:30px;
+top:30px;
+padding:8px 16px;
+border-radius:20px;
+background:linear-gradient(135deg,#ff4d6d,#7b2cbf);
+color:white;
+text-decoration:none;
+font-size:0.8rem;
+transition:0.3s;
+z-index:10;
+position:absolute;
+}
+
+.back-btn:hover{
+transform:scale(1.05);
+}
+
+/* gallery */
+
+.gallery{
+max-width:1200px;
+margin:auto;
+padding:40px 20px 80px;
+column-count:4;
+column-gap:20px;
+}
+
+.gallery img{
+width:100%;
+margin-bottom:20px;
+border-radius:14px;
+cursor:pointer;
+transition:0.4s;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.gallery img:hover{
+transform:scale(1.05);
+}
+
+/* responsive */
+
+@media(max-width:1000px){
+.gallery{column-count:3;}
+}
+
+@media(max-width:700px){
+.gallery{column-count:2;}
+}
+
+@media(max-width:500px){
+.gallery{column-count:1;}
+}
+
+/* lightbox */
+
+.lightbox{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+z-index:1000;
+}
+
+.lightbox.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.lightbox img{
+max-width:90%;
+max-height:90%;
+border-radius:12px;
+}
+
+.close{
+position:absolute;
+top:20px;
+right:25px;
+font-size:30px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="shape shape1"></div>
+<div class="shape shape2"></div>
+<div class="shape shape3"></div>
+
+<a href="gallery.html" class="back-btn">← Back</a>
+
+<header>
+
+<h1>Moments That Built Me</h1>
+
+<p class="quote">
+"Not every achievement lives on certificates.  
+Some live in experiences, growth, and unforgettable moments."
+</p>
+
+</header>
+
+
+<section class="gallery">
+
+<img src="img/personal/p1.jpeg" alt="Personal moment 1">
+<img src="img/personal/p2.jpeg" alt="Personal moment 2">
+<img src="img/personal/p3.jpeg" alt="Personal moment 3">
+<img src="img/personal/p4.jpeg" alt="Personal moment 4">
+<img src="img/personal/p5.jpeg" alt="Personal moment 5">
+<img src="img/personal/p6.jpeg" alt="Personal moment 6">
+<img src="img/personal/p7.jpeg" alt="Personal moment 7">
+<img src="img/personal/p8.jpeg" alt="Personal moment 8">
+<img src="img/personal/p9.jpeg" alt="Personal moment 9">
+<img src="img/personal/p10.jpeg" alt="Personal moment 10">
+<img src="img/personal/p11.jpeg" alt="Personal moment 11"> 
+<img src="img/personal/p12.jpeg" alt="Personal moment 12">
+<img src="img/personal/p13.jpeg" alt="Personal moment 13">
+<img src="img/personal/p14.jpeg" alt="Personal moment 14">
+<img src="img/personal/p15.jpeg" alt="Personal moment 15">
+<img src="img/personal/p16.jpeg" alt="Personal moment 16">
+<img src="img/personal/p17.jpeg" alt="Personal moment 17">
+<img src="img/personal/p18.jpg" alt="Personal moment 18">
+<img src="img/personal/p19.jpg" alt="Personal moment 19">   
+<img src="img/personal/p20.jpg" alt="Personal moment 20">
+<img src="img/personal/p21.jpg" alt="Personal moment 21">
+
+</section>
+
+
+<div class="lightbox" id="lightbox">
+<span class="close" id="close">×</span>
+<img id="lightbox-img" alt="Lightbox image">
+</div>
+
+
+<script>
+
+const images=document.querySelectorAll(".gallery img");
+const lightbox=document.getElementById("lightbox");
+const lightboxImg=document.getElementById("lightbox-img");
+const close=document.getElementById("close");
+
+images.forEach(img=>{
+img.addEventListener("click",()=>{
+lightbox.classList.add("active");
+lightboxImg.src=img.src;
+});
+});
+
+close.onclick=()=>{
+lightbox.classList.remove("active");
+};
+
+lightbox.onclick=(e)=>{
+if(e.target!==lightboxImg){
+lightbox.classList.remove("active");
+}
+};
+
+</script>
+
+</body>
+</html>
