@@ -65,7 +65,8 @@ Message: ${message}
 
 // ===== OpenAI client =====
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // .env me key rakho
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
 });
 
 // ===== Sahil Bot system prompt =====
@@ -99,7 +100,7 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const completion = await client.chat.completions.create({
-      model: 'gpt-4.1-mini',          // ya 'gpt-4o-mini' agar available ho
+      model: 'llama3-70b-8192',        // ya 'Groq' agar available ho
       messages: [
         { role: 'system', content: SAHIL_PROFILE },
         { role: 'user', content: message },
