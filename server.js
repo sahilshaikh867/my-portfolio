@@ -64,10 +64,12 @@ Message: ${message}
 });
 
 // ===== OpenAI client =====
-const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
-});
+const client = process.env.GROQ_API_KEY
+  ? new OpenAI({
+      apiKey: process.env.GROQ_API_KEY,
+      baseURL: "https://api.groq.com/openai/v1",
+    })
+  : null;
 
 // ===== Sahil Bot system prompt =====
 const SAHIL_PROFILE = `
@@ -327,14 +329,20 @@ app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ reply: 'Kya poochna chahte ho? 🙂' });
 
+  if (!client) {
+    return res.status(503).json({ 
+      reply: 'AI Chatbot service is currently offline. Please contact Sahil directly through the Contact section or LinkedIn!' 
+    });
+  }
+
   try {
-   const completion = await client.chat.completions.create({
-  model: "llama-3.3-70b-versatile",
-  messages: [
-    { role: "system", content: SAHIL_PROFILE },
-    { role: "user", content: message }
-  ]
-});
+    const completion = await client.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: SAHIL_PROFILE },
+        { role: "user", content: message }
+      ]
+    });
 
     const reply = completion.choices[0].message.content;
     res.json({ reply });
@@ -349,30 +357,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-async function handleSend() {
-  const text = chatbotInput.value.trim();
-  if (!text) return;
 
-  addMessage(text, 'user');
-  chatbotInput.value = '';
-
-  addMessage('Thinking...', 'bot');
-
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
-    });
-
-    const data = await res.json();
-    chatbotBody.removeChild(chatbotBody.lastChild);
-
-    const reply = data.reply || getBotReply(text);
-    addMessage(reply, 'bot');
-  } catch (err) {
-    console.error(err);
-    chatbotBody.removeChild(chatbotBody.lastChild);
-    addMessage(getBotReply(text), 'bot');
-  }
-}
